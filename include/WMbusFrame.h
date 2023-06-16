@@ -13,8 +13,6 @@ class WMBusFrame
     static const uint8_t MAX_LENGTH = 64;
   private:
     CTR<AESSmall128> aes128;
-    const uint8_t meterId[4] = { W_SERIAL_NUMBER }; // Multical21 serial number
-    const uint8_t key[16] = { W_ENCRYPTION_KEY }; // AES-128 key
     uint8_t cipher[MAX_LENGTH];
     uint8_t plaintext[MAX_LENGTH];
     uint8_t iv[16];

@@ -14,6 +14,9 @@
 
 #include "WMbusFrame.h"
 
+void  mqttMyData(const char* debug_str);
+void  mqttMyDataJson(const char* debug_str);
+
 WMBusFrame::WMBusFrame()
 {
   aes128.setKey(key, sizeof(key));
@@ -43,6 +46,9 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
   int pos_ic = 7; // info codes
   int pos_ft = 17; // flow temp
   int pos_at = 18; // ambient temp
+  
+  char mqttstring[25];
+  char mqttjsondstring[100];
 
   if (data[2] == 0x78) // long frame
   {
@@ -50,9 +56,15 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
     pos_tt = 10;
     pos_tg = 16;
     pos_ic = 6;
-    pos_ft = 22;
-    pos_at = 25;
+    pos_ft = 23;
+    pos_at = 29;
   }
+
+  Serial.printf("Data: "); 
+  for(int k=0; k < len; k++) { 
+    Serial.printf("%02x", data[k]);
+  }
+  Serial.printf("\n\r");
 
   char total[10];
   uint32_t tt = data[pos_tt]
@@ -61,6 +73,8 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
               + (data[pos_tt+3] << 24);
   snprintf(total, sizeof(total), "%d.%03d", tt/1000, tt%1000 );
   Serial.printf("total: %s m%c - ", total, 179);
+  snprintf(mqttstring, sizeof(mqttstring), "%d.%03d", tt/1000, tt%1000 );
+  mqttMyData(mqttstring);
 
   char target[10];
   uint32_t tg = data[pos_tg]
@@ -77,6 +91,9 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
   char ambient_temp[3];
   snprintf(ambient_temp, sizeof(ambient_temp), "%2d", data[pos_at]);
   Serial.printf("%s %cC\n\r", ambient_temp, 176);
+
+  snprintf(mqttjsondstring, sizeof(mqttjsondstring), "{\"CurrentValue\": %d.%03d,\"MonthStartValue\": %d.%03d,\"WaterTemp\": %2d,\"RoomTemp\": %2d}",tt/1000, tt%1000, tg/1000, tg%1000, data[pos_ft],data[pos_at]);
+  mqttMyDataJson(mqttjsondstring);
 }
 
 void WMBusFrame::decode()

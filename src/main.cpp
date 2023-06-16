@@ -22,8 +22,8 @@
 #endif
 #include <PubSubClient.h>
 #include <ArduinoOTA.h>
-#include "WaterMeter.h"
 #include "credentials.h"
+#include "WaterMeter.h"
 #include "hwconfig.h"
 
 #define ESP_NAME "WaterMeter"
@@ -34,14 +34,6 @@
   #define LED_BUILTIN 4
 #endif
 
-//Wifi settings: SSID, PW, MQTT broker
-#define NUM_SSID_CREDENTIALS  3
-const char *credentials[NUM_SSID_CREDENTIALS][4] =  
-  // SSID,        PW,           MQTT
-  { {SSID1,       PW1,          MQTT1 }
-  , {SSID2,       PW2,          MQTT2 }
-  , {SSID3,       PW3,          MQTT3 }
-  };
 
 WaterMeter waterMeter;
 
@@ -134,7 +126,7 @@ bool ConnectWifi(void)
 
 void mqttDebug(const char* debug_str)
 {
-    String s="/watermeter/debug";
+    String s="watermeter/0/debug";
     mqttClient.publish(s.c_str(), debug_str);
 }
 
@@ -183,28 +175,40 @@ bool mqttConnect()
   mqttClient.setCallback(mqttCallback);
 
   // connect client to retainable last will message
-  return mqttClient.connect(ESP_NAME, "/watermeter/online", 0, true, "False");
+  return mqttClient.connect(ESP_NAME, mqtt_user, mqtt_pass, "watermeter/0/online", 0, true, "False");
+}
+
+void  mqttMyData(const char* debug_str)
+{
+    String s="watermeter/0/sensor/mydata";
+    mqttClient.publish(s.c_str(), debug_str, true);
+}
+
+void  mqttMyDataJson(const char* debug_str)
+{
+    String s="watermeter/0/sensor/mydatajson";
+    mqttClient.publish(s.c_str(), debug_str, true);
 }
 
 void mqttSubscribe()
 {
   String s;
   // publish online status
-  s = "/watermeter/online";
+  s = "watermeter/0/online";
   mqttClient.publish(s.c_str(), "True", true);
-//  Serial.print("MQTT-SEND: ");
-//  Serial.print(s);
-//  Serial.println(" True");
+  Serial.print("MQTT-SEND: ");
+  Serial.print(s);
+  Serial.println(" True");
   
   // publish ip address
-  s="/watermeter/ipaddr";
+  s="watermeter/0/ipaddr";
   IPAddress MyIP = WiFi.localIP();
   snprintf(MyIp, 16, "%d.%d.%d.%d", MyIP[0], MyIP[1], MyIP[2], MyIP[3]);
   mqttClient.publish(s.c_str(), MyIp, true);
-//  Serial.print("MQTT-SEND: ");
-//  Serial.print(s);
-//  Serial.print(" ");
-//  Serial.println(MyIp);
+  Serial.print("MQTT-SEND: ");
+  Serial.print(s);
+  Serial.print(" ");
+  Serial.println(MyIp);
 
   // if smarthome.py restarts -> publish init values
   s = "/smarthomeNG/start";
@@ -212,11 +216,11 @@ void mqttSubscribe()
 
   // if True; meter data are published every 5 seconds
   // if False: meter data are published once a minute
-  s = "/watermeter/liveData";
+  s = "watermeter/0/liveData";
   mqttClient.subscribe(s.c_str());
 
   // if True -> perform an reset
-  s = "/espmeter/reset";
+  s = "espmeter/reset";
   mqttClient.subscribe(s.c_str());
 }
 

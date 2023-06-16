@@ -17,7 +17,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "WMBusFrame.h"
+#include "WMbusFrame.h"
 
 #define MARCSTATE_SLEEP            0x00
 #define MARCSTATE_IDLE             0x01
