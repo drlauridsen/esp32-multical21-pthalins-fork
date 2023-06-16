@@ -1,8 +1,8 @@
 # Multical 21 water meter in Home Assitant (Wireless MBus)
 
-## Features
-Configuration for Home Assistan with MQTT\
-Support for AES-128 decryption (with vaild key)
+### Features
+* Configuration ready for Home Assistan with MQTT.
+* Support for AES-128 decryption (with vaild key).
 
 ## Parts 
 Use these arfilliate links to support me!\
@@ -24,8 +24,8 @@ GD2   => not connected
 ![](images/wires.jpg)
 
 ## Compile
-Rename credentials_template.h to credentials.h and add your details.\
-Complie and upload with [PlatformIO](https://platformio.org/)
+* Rename credentials_template.h to credentials.h and add your details.\
+* Complie and upload with [PlatformIO](https://platformio.org/)
 
 ## Home Assistant
 
