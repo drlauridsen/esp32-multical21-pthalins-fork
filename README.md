@@ -1,13 +1,17 @@
-# Multical 21 water meter in Home Assitant (Wireless MBus)
+# Kamstrup Multical 21 water meter in Home Assitant (Wireless MBus)
 
 ### Features
 * Configuration ready for Home Assistan with MQTT.
 * Support for AES-128 decryption (with vaild key).
+* CRC Check of recived data.
+* Wireless reading of data.
+* Easy to build and configure.
 
 ## Parts 
 Use these arfilliate links to support me!\
 [CC1101 Module](https://s.click.aliexpress.com/e/_DembjFr) \
-[ESP32 DevKit](https://s.click.aliexpress.com/e/_mPgipQY)
+[ESP32 DevKit](https://s.click.aliexpress.com/e/_mPgipQY) \
+Some cables
 
 ## Wiring
 CC1101 => ESP32\
@@ -23,9 +27,13 @@ GD2   => not connected
 ![](images/device.jpg)
 ![](images/wires.jpg)
 
-## Compile
-* Rename credentials_template.h to credentials.h and add your details.\
-* Complie and upload with [PlatformIO](https://platformio.org/)
+## Build and Upload Firmware
+* Make sure you have a decryption key for your meter (you need to ask your water service provider for it).
+* Read the serial number on the meter (typically S/N: XXXXXXXX/A/20, the serial number is the XXXXXXXXX part).
+* Rename credentials_template.h to credentials.h and add your details.
+* Compile and upload:
+  - You need [VS Code](https://code.visualstudio.com/) and the [PIO Plugin](https://platformio.org/)
+  - Open the project folder with the platformio.ini file (File -> Open Folder...), connect the ESP32 via USB then build and upload with Ctrl+Alt+U.
 
 ## Home Assistant
 
