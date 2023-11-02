@@ -18,6 +18,8 @@ class WMBusFrame
     uint8_t iv[16];
     void check(void);
     void printMeterInfo(uint8_t *data, size_t len);
+    uint16_t crc16_EN13757_per_byte(uint16_t crc, uint8_t b);
+    uint16_t crc16_EN13757(uint8_t *data, size_t len);
 
   public:
     // check frame and decrypt it
