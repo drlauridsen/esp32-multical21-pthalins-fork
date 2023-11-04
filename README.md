@@ -1,4 +1,4 @@
-# Kamstrup Multical 21 water meter in Home Assitant (Wireless MBus)
+# Kamstrup Multical 21 water meter in Home Assistant (Wireless MBus)
 
 <img align="right" height="250" src="images/kamstrup_multical21.png">
 
