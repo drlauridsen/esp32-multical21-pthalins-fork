@@ -16,23 +16,21 @@ Use these arfilliate links to support me!\
 [ESP32 DevKit](https://s.click.aliexpress.com/e/_mPgipQY) \
 Some cables
 
-
-
-
 ### Wiring
 
-CC1101 => ESP32\
-VCC   => 3V3\
-GND   => GND\
-CSN   => P4\
-MOSI  => P23\
-MISO  => P19\
-SCK   => P18\
-GD0   => P32\
-GD2   => not connected
+| CC1101 | ESP32 |
+| --- | --- |
+| VCC | 3V3 |
+| GND | GND |
+| CSN | P4 |
+| MOSI| P23 |
+| MISO| P19 |
+| SCK | P18 |
+| GD0 | P32 |
+| GD2 | Not Connected |
+
 
 <img height="300" src="images/device.jpg"> <img height="300" src="images/wires.jpg">
-
 
 ### Build and Upload Firmware
 * Make sure you have a decryption key for your meter (you need to ask your water service provider for it).
