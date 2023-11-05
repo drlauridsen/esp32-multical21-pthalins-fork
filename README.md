@@ -31,8 +31,8 @@ SCK   => P18\
 GD0   => P32\
 GD2   => not connected
 
-<img align="center" height="300" src="images/device.jpg">
-<img align="center" height="300" src="images/wires.jpg">
+<img height="300" src="images/device.jpg"> <img height="300" src="images/wires.jpg">
+
 
 ### Build and Upload Firmware
 * Make sure you have a decryption key for your meter (you need to ask your water service provider for it).
