@@ -12,6 +12,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* Uncoment the line below for exprimental FlowIQ 2200 support. NOTE: It only reports the volume, other values like temperature will be 0. */
+
+//#define FLOWIQ2200
+
 #include "WMbusFrame.h"
 
 void  mqttMyData(const char* debug_str);
@@ -61,6 +65,13 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
   }
   Serial.printf("\n\r");
 
+#ifdef FLOWIQ2200
+  if(data[2] == 0x79)  //compact frame
+  {
+    pos_tt = 29; 
+  }
+#else
+  // Multical 21
   if(data[2] == 0x79)  //compact frame
   {
     pos_tt = 9;
@@ -78,6 +89,7 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
     pos_ft = 23;
     pos_at = 29;
   } 
+#endif
   else
     return;
 
@@ -106,6 +118,9 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
   snprintf(mqttstring, sizeof(mqttstring), "%d.%03d", tt/1000, tt%1000 );
   mqttMyData(mqttstring);
 
+#ifdef FLOWIQ2200
+  snprintf(mqttjsondstring, sizeof(mqttjsondstring), "{\"CurrentValue\": %d.%03d,\"MonthStartValue\": %d.%03d,\"WaterTemp\": %2d,\"RoomTemp\": %2d}",tt/1000, tt%1000, 0, 0, 0, 0);
+#else
   char target[10];
   uint32_t tg = data[pos_tg]
               + (data[pos_tg+1] << 8)
@@ -123,6 +138,7 @@ void WMBusFrame::printMeterInfo(uint8_t *data, size_t len)
   Serial.printf("%s %cC\n\r", ambient_temp, 176);
 
   snprintf(mqttjsondstring, sizeof(mqttjsondstring), "{\"CurrentValue\": %d.%03d,\"MonthStartValue\": %d.%03d,\"WaterTemp\": %2d,\"RoomTemp\": %2d}",tt/1000, tt%1000, tg/1000, tg%1000, data[pos_ft],data[pos_at]);
+#endif
   mqttMyDataJson(mqttjsondstring);
 }
 
