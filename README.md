@@ -74,5 +74,7 @@ mqtt:
       unit_of_measurement: "°C"
 ```
 
+Donation using [Ko-Fi](https://ko-fi.com/patriksretrotech) or [PayPal](https://www.paypal.com/donate/?business=UCTJFD6L7UYFL&no_recurring=0&item_name=Please+support+me%21&currency_code=SEK) are highly appreciated!
+
 This is a based on [chester4444/esp-multical21](https://github.com/chester4444/esp-multical21).
 Thanks to chester4444for his effort.
