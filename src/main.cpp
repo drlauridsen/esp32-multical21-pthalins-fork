@@ -25,6 +25,7 @@
 #include "credentials.h"
 #include "WaterMeter.h"
 #include "hwconfig.h"
+#include "mqttsensorconfig.h"
 
 #define ESP_NAME "WaterMeter"
 
@@ -126,7 +127,7 @@ bool ConnectWifi(void)
 
 void mqttDebug(const char* debug_str)
 {
-    String s="watermeter/0/debug";
+    String s=String(node_id) + "/0/debug";
     mqttClient.publish(s.c_str(), debug_str);
 }
 
@@ -171,37 +172,56 @@ void mqttCallback(char* topic, byte* payload, unsigned int len)
 
 bool mqttConnect()
 {
-  mqttClient.setServer(credentials[cred][2], 1883);
+  mqttClient.setServer(credentials[cred][2], mqtt_port);
   mqttClient.setCallback(mqttCallback);
 
   // connect client to retainable last will message
-  return mqttClient.connect(ESP_NAME, mqtt_user, mqtt_pass, "watermeter/0/online", 0, true, "False");
+  String s=String(node_id) + "/0/online";
+  return mqttClient.connect(ESP_NAME, mqtt_user, mqtt_pass, s.c_str(), 0, true, "False");
 }
 
-void  mqttMyData(const char* debug_str)
+void mqttMyData(const char* debug_str)
 {
-    String s="watermeter/0/sensor/mydata";
+    String s=String(node_id) + "/0/sensor/mydata";
     mqttClient.publish(s.c_str(), debug_str, true);
 }
 
-void  mqttMyDataJson(const char* debug_str)
+void mqttMyDataJson(const char* debug_str)
 {
-    String s="watermeter/0/sensor/mydatajson";
+    String s=String(node_id) + "/0/sensor/mydatajson";
     mqttClient.publish(s.c_str(), debug_str, true);
+}
+
+void sendHADiscoveryConfig() //function that creates 4 sensors for autodiscovery in Home Assistant
+{
+  #include "hadiscovery.h"
+  mqttClient.setBufferSize(10000); //increase mqttclient buffersize to publish long json payloads
+  //Water Temp discovery sensor
+  String s1=String(discovery_prefix) + "/sensor/" + String(node_id) + "_" + String(water_temp_config_topic) + "/config";
+  mqttClient.publish(s1.c_str(), water_temp_json_config.c_str(), true);
+   //Room Temp discovery sensor
+  String s2=String(discovery_prefix) + "/sensor/" + String(node_id) + "_" + String(room_temp_config_topic) + "/config";
+  mqttClient.publish(s2.c_str(), room_temp_json_config.c_str(), true);
+   //Water Usage discovery sensor
+  String s3=String(discovery_prefix) + "/sensor/" + String(node_id) + "_" + String(water_usage_config_topic) + "/config";
+  mqttClient.publish(s3.c_str(), water_usage_json_config.c_str(), true);
+   //Water Meter Month Start Value discovery sensor
+  String s4=String(discovery_prefix) + "/sensor/" + String(node_id) + "_" + String(water_usage_month_start_config_topic) + "/config";
+  mqttClient.publish(s4.c_str(), water_usage_month_start_json_config.c_str(), true);
 }
 
 void mqttSubscribe()
 {
   String s;
   // publish online status
-  s = "watermeter/0/online";
+  s = String(node_id) + "/0/online";
   mqttClient.publish(s.c_str(), "True", true);
   Serial.print("MQTT-SEND: ");
   Serial.print(s);
   Serial.println(" True");
   
   // publish ip address
-  s="watermeter/0/ipaddr";
+  s=String(node_id) + "/0/ipaddr";
   IPAddress MyIP = WiFi.localIP();
   snprintf(MyIp, 16, "%d.%d.%d.%d", MyIP[0], MyIP[1], MyIP[2], MyIP[3]);
   mqttClient.publish(s.c_str(), MyIp, true);
@@ -210,13 +230,19 @@ void mqttSubscribe()
   Serial.print(" ");
   Serial.println(MyIp);
 
+  //create HA discovery sensors if enabled in mqttsensorconfig
+  if (enable_HA_discovery_sensors == 1) {
+    sendHADiscoveryConfig();
+    Serial.println("HA Discovery config sent");
+  }
+
   // if smarthome.py restarts -> publish init values
   s = "/smarthomeNG/start";
   mqttClient.subscribe(s.c_str());
 
   // if True; meter data are published every 5 seconds
   // if False: meter data are published once a minute
-  s = "watermeter/0/liveData";
+  s = String(node_id) + "/0/liveData";
   mqttClient.subscribe(s.c_str());
 
   // if True -> perform an reset
@@ -382,7 +408,6 @@ void loop()
       {
         // subscribe to given topics
         mqttSubscribe();
-        
         ControlState = StateOperating;
         digitalWrite(LED_BUILTIN, LOW); // on
         Serial.println("StateOperating:");

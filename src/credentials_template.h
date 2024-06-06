@@ -12,6 +12,7 @@ static const char *credentials[NUM_SSID_CREDENTIALS][3] =
 
 const char mqtt_user[] = "mosquitto-user";
 const char mqtt_pass[] = "mosquitto-pass!";
+const uint16_t mqtt_port = 1883; //custom mqtt server port (default 1883)
 
 const uint8_t meterId[4] = { 0x00, 0x00, 0x00, 0x00 }; // Multical21 serial. Printed as hex on meter.
 const uint8_t key[16] = { 0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 }; // AES-128 key. Ask your service provider.
