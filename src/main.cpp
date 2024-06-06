@@ -231,7 +231,7 @@ void mqttSubscribe()
   Serial.println(MyIp);
 
   //create HA discovery sensors if enabled in mqttsensorconfig
-  if (enable_HA_discovery_sensors == 1) {
+  if (enable_HA_discovery_sensors == true) {
     sendHADiscoveryConfig();
     Serial.println("HA Discovery config sent");
   }

@@ -4,7 +4,7 @@
 // You probably want to customize between --- but the rest is optional
 // --
 // Enable/Disable the Home Assistant discovery sensors, 0 or 1, default is 1 = enabled
-const bool enable_HA_discovery_sensors = "1";
+const bool enable_HA_discovery_sensors = 1;
 
 // MQTT Device details - these are the device info that is shown for the Home Assistant auto discovered MQTT device
 const char* device_name = "Watermeter TEST";
