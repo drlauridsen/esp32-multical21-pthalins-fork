@@ -3,7 +3,7 @@
 <img align="right" height="250" src="images/kamstrup_multical21.png">
 
 ### Features
- * Configuration ready for Home Assistan with MQTT.
+ * Configuration ready for Home Assistan with MQTT. This fork has added autodisovery sensors, so no need to edit yaml config files.
  * Support for AES-128 decryption (with vaild key).
  * CRC Check of recived data.
  * Wireless reading of data.
@@ -36,11 +36,14 @@ Some cables
 * Make sure you have a decryption key for your meter (you need to ask your water service provider for it).
 * Read the serial number on the meter (typically S/N: XXXXXXXX/A/20, the serial number is the XXXXXXXXX part).
 * Rename credentials_template.h to credentials.h and add your details.
+* Edit the mqttsensors.h file with your device and sensor details.
 * Compile and upload:
   - You need [VS Code](https://code.visualstudio.com/) and the [PIO Plugin](https://platformio.org/)
   - Open the project folder with the platformio.ini file (File -> Open Folder...), connect the ESP32 via USB then build and upload with Ctrl+Alt+U.
 
 ### Home Assistant
+
+This fork has autodiscovery sensors enabled by default, so no need to do the following, unless you disable autodiscovery.
 
 Setup [MQTT](https://www.home-assistant.io/integrations/mqtt/) if you don't already have it.
 
