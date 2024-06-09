@@ -1,6 +1,6 @@
 # Kamstrup Multical 21 water meter in Home Assistant (Wireless MBus)
 
-<img align="right" height="250" src="images/kamstrup_multical21.png">
+<img align="middle" height="250" src="images/kamstrup_multical21.png">
 
 ### Features
  * Configuration ready for Home Assistan with MQTT. This fork has added autodisovery sensors, so no need to edit yaml config files.
