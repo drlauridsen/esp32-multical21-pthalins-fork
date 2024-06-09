@@ -43,7 +43,7 @@ Some cables
 
 ### Home Assistant
 
-This fork has autodiscovery sensors enabled by default, so no need to do the following, unless you disable autodiscovery.
+This fork has autodiscovery sensors enabled by default, so no need to edit the HA yaml file, unless you have disabled autodiscovery either here or in HA.
 
 Setup [MQTT](https://www.home-assistant.io/integrations/mqtt/) if you don't already have it.
 
