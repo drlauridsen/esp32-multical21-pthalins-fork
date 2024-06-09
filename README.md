@@ -36,7 +36,7 @@ Some cables
 * Make sure you have a decryption key for your meter (you need to ask your water service provider for it).
 * Read the serial number on the meter (typically S/N: XXXXXXXX/A/20, the serial number is the XXXXXXXXX part).
 * Rename credentials_template.h to credentials.h and add your details.
-* Edit the mqttsensors.h file with your device and sensor details.
+* Edit the mqttsensorconfig.h file with your device and sensor details.
 * Compile and upload:
   - You need [VS Code](https://code.visualstudio.com/) and the [PIO Plugin](https://platformio.org/)
   - Open the project folder with the platformio.ini file (File -> Open Folder...), connect the ESP32 via USB then build and upload with Ctrl+Alt+U.
